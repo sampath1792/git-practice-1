@@ -1,5 +1,5 @@
 name: Test Project
-on: push
+on: [push, workflow_dispatch]
 jobs:
     first-job:
         runs-on: ubuntu-latest
@@ -10,4 +10,16 @@ jobs:
               run: npm ci
             - name: Run tests
               run: npm test
+    second-job:
+        needs: first-job
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get the code
+              uses: actions/checkout@v5
+            - name: Install dependencies
+              run: npm ci
+            - name: Build visitors
+              run:  npm run build
+            - name: Deploy
+              run: echo "Deploying!"
 
